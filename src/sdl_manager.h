@@ -11,7 +11,7 @@ public:
     SDLManager(int width, int height, SDL_Renderer* sdlRenderer);
     ~SDLManager();
     
-    void renderScene(std::vector<Sphere> sceneData);
+    void renderNextFrame(std::vector<Sphere> sceneData);
     unsigned long getFrameCount() const;
 
 private:

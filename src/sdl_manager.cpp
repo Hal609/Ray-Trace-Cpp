@@ -29,9 +29,9 @@ SDLManager::~SDLManager() {
     // Note: sdlRenderer is managed elsewhere and should not be destroyed here
 }
 
-void SDLManager::renderScene(std::vector<Sphere> sceneData) {
+void SDLManager::renderNextFrame(std::vector<Sphere> sceneData) {
     this->pixelBuffer.clear();
-    drawScene(sceneData, this->pixelBuffer, this->width, this->height, this->frameCount);
+    renderScene(sceneData, this->pixelBuffer, this->width, this->height, this->frameCount);
     updateTextureFromPixelBuffer();
 }
 

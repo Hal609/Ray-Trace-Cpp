@@ -44,7 +44,7 @@ int main() {
         }
         std::vector<Sphere> sceneData = loadSpheresFromFile("sceneData.txt");
         // Update and render the scene
-        SDL_Manager.renderScene(sceneData);
+        SDL_Manager.renderNextFrame(sceneData);
     }
 
     // Clean up
