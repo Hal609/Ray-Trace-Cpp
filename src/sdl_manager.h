@@ -1,28 +1,28 @@
-#ifndef SDL_MANAGER_H
-#define SDL_MANAGER_H
+#ifndef SDLMANAGER_H
+#define SDLMANAGER_H
 
+#include "renderer.h"
+#include "sphere.h"
+#include <vector>
 #include <SDL2/SDL.h>
+
 class SDLManager {
 public:
-    SDLManager();
+    SDLManager(int width, int height, SDL_Renderer* sdlRenderer);
     ~SDLManager();
-
-    bool init();
-    bool processEvents();
-    SDL_Window* getWindow() const;
-    bool createRenderer();
-    bool createDoubleBufferTextures();
-
-    SDL_Texture* getFrontBufferTexture() const;
-    SDL_Texture* getBackBufferTexture() const;
+    
+    void renderScene(std::vector<Sphere> sceneData);
+    unsigned long getFrameCount() const;
 
 private:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    SDL_Texture* frontBufferTexture;
+    SDL_Renderer* sdlRenderer;
     SDL_Texture* backBufferTexture;
-    int windowWidth;
-    int windowHeight;
+    SDL_Texture* frontBufferTexture;
+    PixelBuffer pixelBuffer;
+    int width, height;
+    unsigned long frameCount;
+
+    void updateTextureFromPixelBuffer();
 };
 
-#endif // SDL_MANAGER_H
+#endif // SDLMANAGER_H

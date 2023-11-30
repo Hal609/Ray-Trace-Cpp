@@ -1,90 +1,64 @@
 #include "sdl_manager.h"
-#include <SDL2/SDL.h>
 #include <iostream>
 
-SDLManager::SDLManager() : window(nullptr), renderer(nullptr), frontBufferTexture(nullptr), backBufferTexture(nullptr), windowWidth(800), windowHeight(600) {
-    // Constructor code if needed
+SDLManager::SDLManager(int width, int height, SDL_Renderer* sdlRenderer)
+    : sdlRenderer(sdlRenderer), pixelBuffer(width, height), width(width), height(height) {
+    
+    // Create the back buffer texture
+    backBufferTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+    if (!backBufferTexture) {
+        std::cerr << "Failed to create back buffer texture: " << SDL_GetError() << std::endl;
+        // Handle error (perhaps throw an exception or set an error flag)
+    }
+
+    // Create the front buffer texture
+    frontBufferTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+    if (!frontBufferTexture) {
+        std::cerr << "Failed to create front buffer texture: " << SDL_GetError() << std::endl;
+        // Handle error (perhaps throw an exception or set an error flag)
+    }
 }
 
 SDLManager::~SDLManager() {
-    // Cleanup textures and renderer
-    if (frontBufferTexture) {
-        SDL_DestroyTexture(frontBufferTexture);
-    }
     if (backBufferTexture) {
         SDL_DestroyTexture(backBufferTexture);
     }
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-    }
-    if (window) {
-        SDL_DestroyWindow(window);
-    }
-    SDL_Quit();
-}
-
-bool SDLManager::init() {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    // Create SDL window
-    window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
-    if (window == nullptr) {
-        std::cerr << "Failed to create SDL window: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return false;
-    }
-
-    return createRenderer() && createDoubleBufferTextures();
-}
-
-bool SDLManager::createRenderer() {
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == nullptr) {
-        std::cerr << "Failed to create SDL renderer: " << SDL_GetError() << std::endl;
-        return false;
-    }
-    return true;
-}
-
-bool SDLManager::createDoubleBufferTextures() {
-    frontBufferTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowWidth, windowHeight);
-    if (frontBufferTexture == nullptr) {
-        std::cerr << "Failed to create front buffer texture: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    backBufferTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowWidth, windowHeight);
-    if (backBufferTexture == nullptr) {
-        std::cerr << "Failed to create back buffer texture: " << SDL_GetError() << std::endl;
+    if (frontBufferTexture) {
         SDL_DestroyTexture(frontBufferTexture);
-        return false;
+    }
+    // Note: sdlRenderer is managed elsewhere and should not be destroyed here
+}
+
+void SDLManager::renderScene(std::vector<Sphere> sceneData) {
+    this->pixelBuffer.clear();
+    drawScene(sceneData, this->pixelBuffer, this->width, this->height, this->frameCount);
+    updateTextureFromPixelBuffer();
+}
+
+void SDLManager::updateTextureFromPixelBuffer() {
+    // Check if textures are valid
+    if (!backBufferTexture || !frontBufferTexture) {
+        std::cerr << "Texture not initialized properly." << std::endl;
+        return;
     }
 
-    return true;
+    // Update the entire back buffer texture
+    SDL_UpdateTexture(backBufferTexture, NULL, pixelBuffer.getPixelData(), this->width * sizeof(Uint32));
+
+    // Copy the back buffer to the front buffer
+    SDL_SetRenderTarget(sdlRenderer, frontBufferTexture);
+    SDL_RenderCopy(sdlRenderer, backBufferTexture, NULL, NULL);
+
+    // Reset the render target to the default (screen)
+    SDL_SetRenderTarget(sdlRenderer, NULL);
+
+    // Render the front buffer to the screen
+    SDL_RenderCopy(sdlRenderer, frontBufferTexture, NULL, NULL);
+    SDL_RenderPresent(sdlRenderer);
+
+    this->frameCount++;
 }
 
-bool SDLManager::processEvents() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            return true; // Indicates it's time to quit
-        }
-    }
-    return false;
-}
-
-SDL_Window* SDLManager::getWindow() const {
-    return window;
-}
-
-SDL_Texture* SDLManager::getFrontBufferTexture() const {
-    return frontBufferTexture;
-}
-
-SDL_Texture* SDLManager::getBackBufferTexture() const {
-    return backBufferTexture;
+unsigned long SDLManager::getFrameCount() const {
+    return frameCount;
 }

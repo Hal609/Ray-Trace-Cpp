@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#include "renderer.h"
+#include "sdl_manager.h"
 #include "config.h"
 #include "sphere.h"
 #include <vector>
@@ -28,8 +28,8 @@ int main() {
         return 1;
     }
 
-    // Create the Renderer object
-    Renderer renderer(WIDTH, HEIGHT, sdlRenderer);
+    // Create the SDL Manager object
+    SDLManager SDL_Manager(WIDTH, HEIGHT, sdlRenderer);
 
     bool quit = false;
     SDL_Event event;
@@ -44,7 +44,7 @@ int main() {
         }
         std::vector<Sphere> sceneData = loadSpheresFromFile("sceneData.txt");
         // Update and render the scene
-        renderer.renderScene(sceneData);
+        SDL_Manager.renderScene(sceneData);
     }
 
     // Clean up
