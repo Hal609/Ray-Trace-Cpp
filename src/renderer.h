@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include "pixel_buffer.h"
+#include "sphere.h"
 #include <SDL2/SDL.h>
 
 class Renderer {
@@ -9,7 +10,7 @@ public:
     Renderer(int width, int height, SDL_Renderer* sdlRenderer);
     ~Renderer();
     
-    void drawScene(); // Method to draw your scene, which eventually calls updateTextureFromPixelBuffer
+    void renderScene(std::vector<Sphere> sceneData); // Method to draw your scene, which eventually calls updateTextureFromPixelBuffer
     void updateTextureFromPixelBuffer();
     void clearBackBuffer();
     unsigned long getFrameCount() const;

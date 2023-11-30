@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include "renderer.h"
 #include "config.h"
+#include "sphere.h"
+#include <vector>
 
 int main() {
     // Initialize SDL
@@ -39,10 +41,10 @@ int main() {
             if (event.type == SDL_QUIT) {
                 quit = true;
             }
-            // Handle other events here
         }
+        std::vector<Sphere> sceneData = loadSpheresFromFile("sceneData.txt");
         // Update and render the scene
-        renderer.drawScene();
+        renderer.renderScene(sceneData);
     }
 
     // Clean up

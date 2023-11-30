@@ -73,7 +73,6 @@ bool SDLManager::processEvents() {
         if (event.type == SDL_QUIT) {
             return true; // Indicates it's time to quit
         }
-        // Handle other events if necessary
     }
     return false;
 }

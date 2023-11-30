@@ -33,10 +33,4 @@ public:
         return std::sqrt(x * x + y * y + z * z);
     }
 
-    // Other vector-related utility functions
-    // ...
-
 };
-
-// Other function implementations
-// ...

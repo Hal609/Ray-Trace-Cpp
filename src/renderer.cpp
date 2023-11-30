@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include "scene.h"
+#include "sphere.h"
 #include <iostream>
 
 Renderer::Renderer(int width, int height, SDL_Renderer* sdlRenderer)
@@ -29,9 +30,9 @@ Renderer::~Renderer() {
     }
 }
 
-void Renderer::drawScene() {
+void Renderer::renderScene(std::vector<Sphere> sceneData) {
     this->pixelBuffer.clear();
-    drawSimpleScene(this->pixelBuffer, this->width, this->height, this->frameCount);
+    drawScene(sceneData, this->pixelBuffer, this->width, this->height, this->frameCount);
     updateTextureFromPixelBuffer();
 }
 
