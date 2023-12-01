@@ -20,7 +20,7 @@ private:
     SDL_Texture* frontBufferTexture;
     PixelBuffer pixelBuffer;
     int width, height;
-    unsigned long frameCount;
+    unsigned long frameCount = 0;
 
     void updateTextureFromPixelBuffer();
 };

@@ -5,18 +5,13 @@
 #include "sphere.h"  // Assuming Sphere has material properties
 #include <vector>
 
-// Abstract base class for a light source
+
 class Light {
 public:
-    virtual Vector3 calculateContribution(Vector3& point, Vector3& normal, Sphere& object);
-};
-
-class PointLight : public Light {
-public:
-    PointLight(const Vector3& position, const Vector3& color, double intensity)
+    Light(const Vector3& position, const Vector3& color, double intensity)
         : position(position), color(color), intensity(intensity) {}
 
-    Vector3 calculateContribution(Vector3& point, Vector3& normal, Sphere& object);
+    double calculateContribution(Vector3& point, Vector3& normal, Sphere& object);
 
 private:
     Vector3 position;
@@ -29,12 +24,12 @@ private:
 
 class Lighting {
 public:
-    void setAmbientLight(Vector3& ambient);
+    void setAmbientLight(double ambient);
     void addLight(Light* light);
-    Vector3 calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object);
+    double calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object);
 
 private:
-    Vector3 ambientLight;
+    double ambientLight;
     std::vector<Light*> lights; // List of lights in the scene
 };
 
