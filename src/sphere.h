@@ -1,22 +1,20 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include <vector>
+#include <vector3.h>
 #include <string>
 
 class Sphere {
 public:
     double radius;
-    double center[3];
+    Vector3 center;
+    uint32_t color;
     double specularExponent;
     double reflectionCoefficient;
 
-    Sphere(double r, double cx, double cy, double cz, double specExp, double reflCoeff)
-        : radius(r), specularExponent(specExp), reflectionCoefficient(reflCoeff) {
-        center[0] = cx;
-        center[1] = cy;
-        center[2] = cz;
-    }
+    Sphere(double r, Vector3 c, uint32_t color,  double specExp, double reflCoeff)
+        : radius(r), center(c), color(color), specularExponent(specExp), reflectionCoefficient(reflCoeff) {}
+
 };
 
 std::vector<Sphere> loadSpheresFromFile(const std::string& filePath);

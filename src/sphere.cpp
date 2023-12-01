@@ -12,9 +12,12 @@ std::vector<Sphere> loadSpheresFromFile(const std::string& filePath) {
         return spheres;
     }
 
-    double radius, cx, cy, cz, specExp, reflCoeff;
-    while (file >> radius >> cx >> cy >> cz >> specExp >> reflCoeff) {
-        Sphere sphere(radius, cx, cy, cz, specExp, reflCoeff);
+    double r, specExp, reflCoeff;
+    Vector3 centre;
+    uint32_t color;
+
+    while (file >> r >> centre.x >> centre.y >> centre.z >> color >> specExp >> reflCoeff) {
+        Sphere sphere(r, centre, color, specExp, reflCoeff);
         spheres.push_back(sphere);
     }
 
