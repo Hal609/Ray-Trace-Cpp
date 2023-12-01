@@ -1,13 +1,15 @@
 #include "renderer.h"
 #include "sphere.h"
 #include "vector3.h"
+#include <vector>
 #include "ray.h"
+#include <array>
 #include <cmath> // For sin and M_PI
 
 
 std::array<Sphere, 3> spheres = {{
         Sphere(1.0, Vector3(2.0, 1.0, 4.0), 0xff0000, 500.0, 0.2), // Sphere 1
-        Sphere(0.4, Vector3 (0.0, 0.4, -3.0), 0xffffff, 500.0, 0.2), // Sphere 2
+        Sphere(0.4, Vector3 (0.0, 0.4, 3), 0xffffff, 500.0, 0.2), // Sphere 2
         Sphere(0.3, Vector3 (-0.7, 0.3, 5.5), 0x14DC00, 400.0, 0.8) // Sphere 3
     }};
 
@@ -15,42 +17,42 @@ Vector3 camStart = Vector3(0.0, 1.0, 0.0);
 float viewHeight = 1;
 float viewZ = 0.9;
 
-void renderScene(std::vector<Sphere> sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
-    Vector3 camPos = camStart + Vector3(0.005, 0.005, 0.01) * frameCount;
+void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
+    Vector3 camPos = camStart;
+    float heightRatio = viewHeight / height;
 
-    for (int iy = height/2; iy >= -height/2; iy-=1){
-                for (int ix = -width/2; ix <= width/2; ix += 1) {
-                        Vector3 vectToView = viewportCoord(ix, iy, height);
-                        
-                        u_int32_t col = 0x000000;
+    for (int iy = height/2; iy >= -height/2; iy--){
+        for (int ix = -width/2; ix <= width/2; ix++) {
+            Vector3 viewportCoords = Vector3(ix * heightRatio, iy * heightRatio, viewZ);
+            u_int32_t col;
+            bool hit = false;
 
-                        for (auto &sphere : spheres) {
-                                Vector3 intersection = Ray(camPos, vectToView).intersectSphere(sphere);
-                                if (!(intersection == NULL)) {
-                                        Vector3 normal = (intersection - sphere.center).normalized();
-                                        col = sphere.color;
-                                }
-                        }
-                        
-                        int x = width/2 + ix;
-                        int y = height/2 - iy;
-                        pixelBuffer.setPixel(x, y, col);
-                        
+            for (const Sphere &sphere : spheres) {
+                Vector3 intersection = Ray(camPos, viewportCoords.normalized()).intersectSphere(sphere);
+                if (isValidIntersection(intersection)) {
+                    hit = true;
+                    col = sphere.color;
+                    break;
                 }
             }
 
+            if (!hit) {
+                continue;
+            }
+
+            int x = width/2 + ix;
+            int y = height/2 - iy;
+            pixelBuffer.setPixel(x, y, col);
+                
+        }
+    }
 }
 
-Vector3 viewportCoord(int x, int y, int height){
-        // Translates pixel coordinates to viewport coordinates
-
-        Vector3 viewpos;
-        viewpos.x = x * viewHeight/height;
-        viewpos.y = y * viewHeight/height;
-        viewpos.z = viewZ;
-
-        return viewpos;
+bool isValidIntersection(const Vector3& intersection) {
+    return !(intersection == Vector3(-1, -1, -1));
 }
+
+
 /*
 1st Function:
 Convert each pixel convert to viewport coordinates 

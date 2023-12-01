@@ -11,7 +11,7 @@ Vector3 Ray::intersectSphere(const Sphere& sphereToCheck) {
         double discriminant = b * b - 4 * a * c;
 
         if (discriminant < 0) {
-            return NULL; // Return NULL to indicate no intersection
+            return Vector3(-1, -1, -1); // Return NULL to indicate no intersection
         }
 
         double sqrtDiscriminant = std::sqrt(discriminant);
@@ -27,7 +27,7 @@ Vector3 Ray::intersectSphere(const Sphere& sphereToCheck) {
         if (t0 < 0) {
             t0 = t1; 
             if (t0 < 0) {
-                return NULL; // Return NULL to indicate no intersection
+                return Vector3(-1, -1, -1); // Return NULL to indicate no intersection
             }
         }
 

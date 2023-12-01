@@ -2,6 +2,7 @@
 #define SPHERE_H
 
 #include <vector3.h>
+#include <vector>
 #include <string>
 
 class Sphere {

@@ -1,5 +1,6 @@
-CC = g++
-CFLAGS = -g -lSDL2 -lm -lpthread -Isrc -Wall -Wextra -Wpedantic -Wno-unused-variable
+CC = g++-13
+CFLAGS = -g -std=c++17 -I/usr/local/include -Isrc -Wall -Wextra -Wpedantic -Wno-unused-variable
+LDFLAGS = -L/usr/local/lib -lSDL2 -lm -lpthread
 SRC_DIR = src
 OBJ_DIR = .
 TARGET = main
@@ -9,7 +10,7 @@ SRCS = $(SRC_DIR)/light.cpp $(SRC_DIR)/pixel_buffer.cpp $(SRC_DIR)/ray.cpp $(SRC
 
 # Rule for making the final target
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET) $(LDFLAGS)
 
 .PHONY: clean
 
