@@ -34,6 +34,9 @@ int main() {
     bool quit = false;
     SDL_Event event;
 
+    std::vector<Sphere> sceneData = loadSpheresFromFile("sceneData.txt");
+    printf("Loaded %lu spheres from file.\n", sceneData.size());
+    
     // Main loop
     while (!quit) {
         // Event handling
@@ -42,7 +45,6 @@ int main() {
                 quit = true;
             }
         }
-        std::vector<Sphere> sceneData = loadSpheresFromFile("sceneData.txt");
         // Update and render the scene
         SDL_Manager.renderNextFrame(sceneData);
     }

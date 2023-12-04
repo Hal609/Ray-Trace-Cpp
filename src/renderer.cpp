@@ -8,17 +8,9 @@
 #include "light.h"
 #include "color.h"
 
-
-std::array<Sphere, 4> spheres = {{
-        Sphere(1.0, Vector3(2.0, 1.0, 4.0), 0xff0000, 500.0, 0.2), // Sphere 1
-        Sphere(0.4, Vector3(0.0, 0.4, 3), 0xffffff, 500.0, 0.2), // Sphere 2
-        Sphere(0.3, Vector3(-0.7, 0.3, 5.5), 0x14DC00, 400.0, 0.8), // Sphere 3
-        Sphere(5000, Vector3(0, -5000, 0), 0xeeeedd, 500, 0.3) // Floor
-    }};
-
 Lighting lighting;
 
-Vector3 camStart = Vector3(0.0, 1.0, 0.0);
+Vector3 camPos = Vector3(0.0, 1.0, 0.0);
 float viewHeight = 1;
 float viewZ = 0.9;
 
@@ -29,7 +21,7 @@ void setupLighting() {
 }
 
 void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
-    Vector3 camPos = camStart + Vector3(0.005, 0.005, 0.01) * frameCount;
+    camPos = camPos + Vector3(0.005, 0.005, 0.01);
     float heightRatio = viewHeight / height;
     
     if (frameCount == 0) {
@@ -43,7 +35,7 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
             Color col;
             bool hit = false;
 
-            for (auto &sphere : spheres) {
+            for (auto sphere : sceneData) {
                 Vector3 intersection = Ray(camPos, viewportCoords.normalized()).intersectSphere(sphere);
                 if (isValidIntersection(intersection)) {
                     hit = true;
