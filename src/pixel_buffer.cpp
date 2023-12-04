@@ -9,9 +9,9 @@ PixelBuffer::~PixelBuffer() {
     delete[] pixelData;
 }
 
-void PixelBuffer::setPixel(int x, int y, Uint32 color) {
+void PixelBuffer::setPixel(int x, int y, Color color) {
     if (x >= 0 && x < width && y >= 0 && y < height) {
-        pixelData[y * width + x] = color;
+        pixelData[y * width + x] = color.getColor();
     }
 }
 

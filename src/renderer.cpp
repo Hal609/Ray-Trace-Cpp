@@ -6,6 +6,7 @@
 #include <array>
 #include <cmath> // For sin and M_PI
 #include "light.h"
+#include "color.h"
 
 
 std::array<Sphere, 4> spheres = {{
@@ -27,7 +28,6 @@ void setupLighting() {
     lighting.addLight(light);
 }
 
-
 void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
     Vector3 camPos = camStart + Vector3(0.005, 0.005, 0.01) * frameCount;
     float heightRatio = viewHeight / height;
@@ -35,11 +35,12 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
     if (frameCount == 0) {
         setupLighting();
     }
+
     #pragma omp parallel for schedule(dynamic) // Parallelization
     for (int iy = height/2; iy >= -height/2; iy--){
         for (int ix = -width/2; ix <= width/2; ix++) {
             Vector3 viewportCoords = Vector3(ix * heightRatio, iy * heightRatio, viewZ);
-            u_int32_t col;
+            Color col;
             bool hit = false;
 
             for (auto &sphere : spheres) {
@@ -49,7 +50,7 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
                     Vector3 normal = (intersection - sphere.center).normalized();
                     col = sphere.color;
                     float light = lighting.calculateTotalLighting(intersection, normal, sphere);
-                    col = multiplyCol(col, light);
+                    col.multiplyBrightness(light);
                     break;
                 }
             }
@@ -66,15 +67,8 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
     }
 }
 
-u_int32_t multiplyCol(u_int32_t inputCol, double factor){
-    u_int32_t r = (inputCol & 0xff0000) >> 16;
-    u_int32_t g = (inputCol & 0x00ff00) >> 8;
-    u_int32_t b = (inputCol & 0x0000ff);
-    r = std::min(255.0, r * factor);
-    g = std::min(255.0, g * factor);
-    b = std::min(255.0, b * factor);
-    return (r << 16) + (g << 8) + b;
-}
+
+
 
 bool isValidIntersection(const Vector3& intersection) {
     return !(intersection == Vector3(-1, -1, -1));
