@@ -28,20 +28,20 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
         setupLighting();
     }
 
-    #pragma omp parallel for schedule(dynamic) // Parallelization
+    #pragma omp parallel for schedule(dynamic) proc_bind(spread) // Parallelization
     for (int iy = height/2; iy >= -height/2; iy--){
         for (int ix = -width/2; ix <= width/2; ix++) {
             Vector3 viewportCoords = Vector3(ix * heightRatio, iy * heightRatio, viewZ);
             Color col;
             bool hit = false;
 
-            for (auto sphere : sceneData) {
-                Vector3 intersection = Ray(camPos, viewportCoords.normalized()).intersectSphere(sphere);
-                if (isValidIntersection(intersection)) {
+            for (auto& sphere : sceneData) {
+                Vector3 intersection = Ray(camPos, viewportCoords).intersectSphere(sphere);
+                if (!(intersection == Vector3(-1, -1, -1))) {
                     hit = true;
                     Vector3 normal = (intersection - sphere.center).normalized();
-                    col = sphere.color;
                     float light = lighting.calculateTotalLighting(intersection, normal, sphere);
+                    col = sphere.color;
                     col.multiplyBrightness(light);
                     break;
                 }
@@ -58,14 +58,6 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
         }
     }
 }
-
-
-
-
-bool isValidIntersection(const Vector3& intersection) {
-    return !(intersection == Vector3(-1, -1, -1));
-}
-
 
 /*
 1st Function:
