@@ -1,5 +1,5 @@
 CC = g++-13
-CFLAGS = -g -std=c++17 -I/usr/local/include -Isrc -Wall -Wextra -Wpedantic -Wno-unused-variable
+CFLAGS = -g -fopenmp -std=c++17 -I/usr/local/include -Isrc -Wall -Wextra -Wpedantic -Wno-unused-variable
 LDFLAGS = -L/usr/local/lib -lSDL2 -lm -lpthread
 SRC_DIR = src
 OBJ_DIR = .

@@ -23,18 +23,19 @@ float viewZ = 0.9;
 
 void setupLighting() {
     lighting.setAmbientLight(0.2);
-    Light* light = new Light(Vector3(0.0, 1.0, 0.0), 0xFFFFFF, 0.8);
+    Light* light = new Light(Vector3(1.0, 1.0, 0.0), 0xFFFFFF, 0.8);
     lighting.addLight(light);
 }
+
 
 void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
     Vector3 camPos = camStart + Vector3(0.005, 0.005, 0.01) * frameCount;
     float heightRatio = viewHeight / height;
     
     if (frameCount == 0) {
-        setupLighting(); // Slow and bad, do not setup lighting every frame !!!!!!!!!
+        setupLighting();
     }
-
+    #pragma omp parallel for schedule(dynamic) // Parallelization
     for (int iy = height/2; iy >= -height/2; iy--){
         for (int ix = -width/2; ix <= width/2; ix++) {
             Vector3 viewportCoords = Vector3(ix * heightRatio, iy * heightRatio, viewZ);

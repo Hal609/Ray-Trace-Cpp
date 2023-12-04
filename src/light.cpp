@@ -9,7 +9,7 @@ void Lighting::addLight(Light* light) {
 }
 
 double Lighting::calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object) {
-    double totalLight = 0; // Start with ambient light
+    double totalLight = ambientLight; // Start with ambient light
 
     for (auto& light : lights) {
         // Check for shadow; if not in shadow, add light contribution
