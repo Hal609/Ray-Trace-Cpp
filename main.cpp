@@ -4,7 +4,14 @@
 #include "sphere.h"
 #include <vector>
 
+#include <iostream>
+#include <chrono>
+
+
+
 int main() {
+    std::chrono::steady_clock::time_point startTime = std::chrono::steady_clock::now();
+    
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         // Handle error
@@ -34,9 +41,9 @@ int main() {
     bool quit = false;
     SDL_Event event;
 
-    std::vector<Sphere> sceneData = loadSpheresFromFile("sceneData.txt");
-    printf("Loaded %lu spheres from file.\n", sceneData.size());
-    
+    std::vector<Sphere> sphereData = loadSpheresFromFile("sceneData.txt");
+    printf("Loaded %lu spheres from file.\n", sphereData.size());
+
     // Main loop
     while (!quit) {
         // Event handling
@@ -45,8 +52,18 @@ int main() {
                 quit = true;
             }
         }
+
+        // Calculate frame time
+        std::chrono::steady_clock::time_point endTime = std::chrono::steady_clock::now();
+        std::chrono::duration<double> frameDuration = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);
+        startTime = endTime; // Reset the start time for the next frame
+
         // Update and render the scene
-        SDL_Manager.renderNextFrame(sceneData);
+        SDL_Manager.renderNextFrame(sphereData);
+
+        double frameRate = 1 / frameDuration.count();
+        std::cout << "Frame Rate: " << frameRate << " FPS" << std::endl;
+
     }
 
     // Clean up

@@ -20,8 +20,8 @@ void setupLighting() {
     lighting.addLight(light);
 }
 
-void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
-    camPos = camPos + Vector3(0.005, 0.005, 0.01);
+void renderScene(std::vector<Sphere>& sphereData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount) {
+    camPos = camPos + Vector3(0.0005, 0.0005, 0.001);
     float heightRatio = viewHeight / height;
     
     if (frameCount == 0) {
@@ -35,12 +35,12 @@ void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int w
             Color col;
             bool hit = false;
 
-            for (auto& sphere : sceneData) {
+            for (auto& sphere : sphereData) {
                 Vector3 intersection = Ray(camPos, viewportCoords).intersectSphere(sphere);
                 if (!(intersection == Vector3(-1, -1, -1))) {
                     hit = true;
                     Vector3 normal = (intersection - sphere.center).normalized();
-                    float light = lighting.calculateTotalLighting(intersection, normal, sphere);
+                    float light = lighting.calculateTotalLighting(intersection, normal, sphere, sphereData);
                     col = sphere.color;
                     col.multiplyBrightness(light);
                     break;

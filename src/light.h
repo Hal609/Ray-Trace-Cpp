@@ -2,7 +2,7 @@
 #define LIGHTING_H
 
 #include "vector3.h"
-#include "sphere.h"  // Assuming Sphere has material properties
+#include "sphere.h"
 #include <vector>
 
 
@@ -12,6 +12,7 @@ public:
         : position(position), color(color), intensity(intensity) {}
 
     double calculateContribution(Vector3& point, Vector3& normal, Sphere& object);
+    Vector3 getPosition() const;
 
 private:
     Vector3 position;
@@ -26,7 +27,8 @@ class Lighting {
 public:
     void setAmbientLight(double ambient);
     void addLight(Light* light);
-    double calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object);
+    double calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object, std::vector<Sphere>& sphereData) const;
+    bool isInShadow(Vector3& point, Light* light, const std::vector<Sphere>& sphereData) const;
 
 private:
     double ambientLight;

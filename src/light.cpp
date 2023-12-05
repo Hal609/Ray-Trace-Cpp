@@ -1,4 +1,5 @@
 #include "light.h"
+#include "ray.h"
 
 void Lighting::setAmbientLight(double ambient) {
     ambientLight = ambient;
@@ -8,19 +9,34 @@ void Lighting::addLight(Light* light) {
     lights.push_back(light);
 }
 
-double Lighting::calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object) {
+double Lighting::calculateTotalLighting(Vector3& point, Vector3& normal, Sphere& object, std::vector<Sphere>& sphereData) const {
     double totalLight = ambientLight; // Start with ambient light
 
     for (auto& light : lights) {
-        // Check for shadow; if not in shadow, add light contribution
-        // Shadow check logic goes here (ray tracing from point to light source)
-
-        // Assuming no shadow for simplicity
-        totalLight = totalLight + light->calculateContribution(point, normal, object);
+        if (!(isInShadow(point, light, sphereData))) {
+            totalLight = totalLight + light->calculateContribution(point, normal, object);
+        }
     }
     totalLight = std::min(1.0, totalLight); // Clamp to 1.0
     return totalLight;
 }
+
+bool Lighting::isInShadow(Vector3& point, Light* light, const std::vector<Sphere>& sphereData) const {
+    Vector3 lightDir = (light->getPosition() - point).normalized();
+    Ray shadowRay(point, lightDir);
+
+    for (const auto& sphere : sphereData) {
+        if (!(shadowRay.intersectSphere(sphere) == Vector3(-1, -1, -1))) {
+            return true; // Point is in shadow
+        }
+    }
+    return false; // Point is not in shadow
+}
+
+Vector3 Light::getPosition() const {
+    return position;
+}
+
 
 double Light:: calculateContribution(Vector3& point, Vector3& normal, Sphere& object) {
     Vector3 lightDir = (position - point).normalized();
