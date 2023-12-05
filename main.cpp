@@ -20,7 +20,7 @@ int main() {
     }
 
     // Create SDL window
-    SDL_Window* window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+    SDL_Window* window = SDL_CreateWindow("Title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
     if (!window) {
         // Handle error
         SDL_Quit();
@@ -37,7 +37,9 @@ int main() {
     }
 
     // Create the SDL Manager object
-    SDLManager SDL_Manager(WIDTH, HEIGHT, sdlRenderer);
+    int drawableWidth, drawableHeight;
+    SDL_GetRendererOutputSize(sdlRenderer, &drawableWidth, &drawableHeight);
+    SDLManager SDL_Manager(drawableWidth, drawableHeight, sdlRenderer);
 
     bool quit = false;
     SDL_Event event;

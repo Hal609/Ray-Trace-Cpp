@@ -17,6 +17,10 @@ public:
         return colorVal == other.colorVal;
     }
 
+    inline bool operator!=(const Color& other) const {
+        return !(*this == other);
+    }
+
 private:
     uint32_t colorVal;
 };

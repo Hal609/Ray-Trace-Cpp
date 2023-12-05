@@ -16,7 +16,7 @@ float viewZ = 0.9;
 
 void setupLighting() {
     lighting.setAmbientLight(0.2);
-    Light* light = new Light(Vector3(1.0, 1.0, 0.0), 0xFFFFFF, 0.8);
+    Light* light = new Light(Vector3(1.0, 3.0, 0.0), 0xFFFFFF, 0.8);
     lighting.addLight(light);
 }
 

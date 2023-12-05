@@ -26,11 +26,10 @@ bool Lighting::isInShadow(Vector3& point, Light* light, Sphere& object, const st
     Ray shadowRay(point, lightDir);
 
     for (const auto& sphere : sphereData) {
-        if (object == sphere) {
-            continue; // Don't check for intersection with the object itself
-        }
-        if (!(shadowRay.intersectSphere(sphere) == Vector3(-1, -1, -1))) {
-            return true; // Point is in shadow
+        if (object != sphere) {
+            if (shadowRay.intersectSphere(sphere) != Vector3(-1, -1, -1)) {
+                return true; // Point is in shadow
+            }
         }
     }
     return false; // Point is not in shadow

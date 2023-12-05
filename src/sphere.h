@@ -21,6 +21,10 @@ public:
         return radius == other.radius && center == other.center && color == other.color && specularExponent == other.specularExponent && reflectionCoefficient == other.reflectionCoefficient;
     }
 
+    inline bool operator!=(const Sphere& other) const {
+        return !(*this == other);
+    }
+
 };
 
 std::vector<Sphere> loadSpheresFromFile(const std::string& filePath);

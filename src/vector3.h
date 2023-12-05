@@ -29,6 +29,10 @@ public:
         return x == other.x && y == other.y && z == other.z;
     }
 
+    inline bool operator!=(const Vector3& other) const {
+        return !(*this == other);
+    }
+
     inline Vector3 cross(const Vector3& other) const {
         return Vector3(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x);
     }
