@@ -29,12 +29,13 @@ int main() {
     SDL_GetRendererOutputSize(sdlRenderer, &drawableWidth, &drawableHeight);
     SDLManager SDL_Manager(drawableWidth, drawableHeight, sdlRenderer);
 
-    bool quit = false;
-    SDL_Event event;
 
     // Load scene data from file
-    std::vector<Sphere> sphereData = loadSpheresFromFile("sceneData.txt");
+    std::vector<Sphere> sphereData = loadSpheresFromFile("sphereData.txt");
     printf("Loaded %lu spheres from file.\n", sphereData.size());
+
+    bool quit = false;
+    SDL_Event event;
 
     // Main loop
     while (!quit) {
