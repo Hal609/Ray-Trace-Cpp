@@ -7,7 +7,5 @@
 #include <cstdint>
 
 void renderScene(std::vector<Sphere>& sceneData, PixelBuffer& pixelBuffer, int width, int height, unsigned long frameCount);
-Vector3 viewportCoord(int x, int y, int height);
-uint32_t multiplyCol(uint32_t inputCol, double factor);
 
 #endif // SCENEDRAWING_H

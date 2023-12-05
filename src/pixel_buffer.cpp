@@ -12,7 +12,7 @@ PixelBuffer::~PixelBuffer() {
 
 void PixelBuffer::setPixel(int x, int y, Color color) {
     if (x >= 0 && x < width && y >= 0 && y < height) {
-        pixelData[y * width + x] = color.getColor();
+        pixelData[y * width + x] = color.getColorVal();
     }
 }
 

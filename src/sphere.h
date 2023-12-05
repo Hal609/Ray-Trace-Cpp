@@ -17,6 +17,10 @@ public:
     Sphere(double r, Vector3 c, Color color,  double specExp, double reflCoeff)
         : radius(r), center(c), color(color), specularExponent(specExp), reflectionCoefficient(reflCoeff) {}
 
+    inline bool operator==(const Sphere& other) const {
+        return radius == other.radius && center == other.center && color == other.color && specularExponent == other.specularExponent && reflectionCoefficient == other.reflectionCoefficient;
+    }
+
 };
 
 std::vector<Sphere> loadSpheresFromFile(const std::string& filePath);

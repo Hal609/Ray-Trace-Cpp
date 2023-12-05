@@ -54,7 +54,6 @@ void renderScene(std::vector<Sphere>& sphereData, PixelBuffer& pixelBuffer, int 
             int x = width/2 + ix;
             int y = height/2 - iy;
             pixelBuffer.setPixel(x, y, col);
-                
         }
     }
 }

@@ -13,7 +13,7 @@ double Lighting::calculateTotalLighting(Vector3& point, Vector3& normal, Sphere&
     double totalLight = ambientLight; // Start with ambient light
 
     for (auto& light : lights) {
-        if (!(isInShadow(point, light, sphereData))) {
+        if (!(isInShadow(point, light, object, sphereData))) {
             totalLight = totalLight + light->calculateContribution(point, normal, object);
         }
     }
@@ -21,11 +21,14 @@ double Lighting::calculateTotalLighting(Vector3& point, Vector3& normal, Sphere&
     return totalLight;
 }
 
-bool Lighting::isInShadow(Vector3& point, Light* light, const std::vector<Sphere>& sphereData) const {
+bool Lighting::isInShadow(Vector3& point, Light* light, Sphere& object, const std::vector<Sphere>& sphereData) const {
     Vector3 lightDir = (light->getPosition() - point).normalized();
     Ray shadowRay(point, lightDir);
 
     for (const auto& sphere : sphereData) {
+        if (object == sphere) {
+            continue; // Don't check for intersection with the object itself
+        }
         if (!(shadowRay.intersectSphere(sphere) == Vector3(-1, -1, -1))) {
             return true; // Point is in shadow
         }
@@ -36,7 +39,6 @@ bool Lighting::isInShadow(Vector3& point, Light* light, const std::vector<Sphere
 Vector3 Light::getPosition() const {
     return position;
 }
-
 
 double Light:: calculateContribution(Vector3& point, Vector3& normal, Sphere& object) {
     Vector3 lightDir = (position - point).normalized();

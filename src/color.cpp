@@ -5,7 +5,7 @@ void Color::setColor(uint32_t colorVal){
     this->colorVal = colorVal;
 }
 
-uint32_t Color::getColor(){
+uint32_t Color::getColorVal(){
     return this->colorVal;
 }
 
