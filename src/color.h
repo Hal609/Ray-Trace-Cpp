@@ -2,6 +2,7 @@
 #define COLOR_H
 
 #include <cmath>
+#include <cstdint>
 
 class Color {
 public:

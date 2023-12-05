@@ -1,4 +1,5 @@
 #include "color.h"
+#include <cstdint>
 
 void Color::setColor(uint32_t colorVal){
     this->colorVal = colorVal;

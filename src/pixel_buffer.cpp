@@ -1,5 +1,6 @@
 #include "pixel_buffer.h"
 #include <cstring> // For memset
+#include <cstdint>
 
 PixelBuffer::PixelBuffer(int width, int height) : width(width), height(height) {
     pixelData = new Uint32[width * height];

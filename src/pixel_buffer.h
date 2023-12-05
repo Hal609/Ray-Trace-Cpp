@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <color.h>
+#include <cstdint>
 
 class PixelBuffer {
 private:

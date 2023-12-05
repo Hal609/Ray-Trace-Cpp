@@ -1,18 +1,19 @@
 #include "sdl_manager.h"
 #include <iostream>
+#include <cstdint>
 
 SDLManager::SDLManager(int width, int height, SDL_Renderer* sdlRenderer)
     : sdlRenderer(sdlRenderer), pixelBuffer(width, height), width(width), height(height) {
     
     // Create the back buffer texture
-    backBufferTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, height);
+    backBufferTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
     if (!backBufferTexture) {
         std::cerr << "Failed to create back buffer texture: " << SDL_GetError() << std::endl;
         // Handle error (perhaps throw an exception or set an error flag)
     }
 
     // Create the front buffer texture
-    frontBufferTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
+    frontBufferTexture = SDL_CreateTexture(sdlRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
     if (!frontBufferTexture) {
         std::cerr << "Failed to create front buffer texture: " << SDL_GetError() << std::endl;
         // Handle error (perhaps throw an exception or set an error flag)
