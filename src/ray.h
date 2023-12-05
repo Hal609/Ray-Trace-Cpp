@@ -13,7 +13,10 @@ public:
     Ray(const Vector3& origin, const Vector3& direction) : origin(origin), direction(direction.normalized()) {}
 
     Vector3 intersectSphere(const Sphere& sphereToCheck);
-    Vector3 reflect(const Vector3& normal);
+    
+    inline Vector3 reflected(const Vector3& normal) const {
+        return direction - normal * 2.0 * direction.dot(normal);
+    }
 };
 
 #endif // RAY_H

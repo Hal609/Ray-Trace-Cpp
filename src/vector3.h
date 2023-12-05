@@ -45,6 +45,10 @@ public:
         double len = length();
         return Vector3(x / len, y / len, z / len);
     }
+
+    inline Vector3 reflected(const Vector3& normal) const {
+        return *this - normal * 2.0 * this->dot(normal);
+    }
 };
 
 #endif // VECTOR3_H

@@ -34,8 +34,3 @@ Vector3 Ray::intersectSphere(const Sphere& sphereToCheck) {
         // Return the intersection point
         return origin + direction * t0;
 }
-
-
-Vector3 Ray::reflect(const Vector3& normal) {
-    return direction - (normal * 2.0) * direction.dot(normal);
-}
