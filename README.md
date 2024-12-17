@@ -3,7 +3,7 @@
 A Raytrace Renderer implemented in C++ using the SDL2 library, designed to demonstrate real-time ray tracing rendering techniques.
 
 Renders the scene:
-![screen-gif](./output.gif)
+![Watch the video](https://raw.githubusercontent.com/hal609/Ray-Trace-Cpp/main/output.mp4)
 
 ### Features
 
