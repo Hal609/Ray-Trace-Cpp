@@ -4,7 +4,7 @@ A Raytrace Renderer implemented in C++ using the SDL2 library, designed to demon
 
 Renders the scene:
 
-[![Watch the video](https://img.youtube.com/vi/RGCvbxsH9fo/0.jpg)](https://youtu.be/RGCvbxsH9fo)
+![Raytrace Renderer](output.gif)
   
 ### Features
 
